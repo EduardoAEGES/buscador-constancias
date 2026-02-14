@@ -73,7 +73,7 @@ function buscar() {
   if (encontrado) {
     document.getElementById("resultado").innerHTML =
       `<h3>${encontrado.nombre}</h3>
-       <iframe src="${encontrado.url.replace('/view','/preview')}"></iframe>`;
+       <iframe src="${encontrado.url}"></iframe>`;
   } else {
     document.getElementById("resultado").innerHTML =
       "<p style='color:red;'>Código no encontrado</p>";
