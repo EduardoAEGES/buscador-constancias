@@ -45,34 +45,23 @@ iframe {
 <script>
 
 let baseDatos = [];
-let archivoCSV = obtenerParametro("archivo");
 
-if (!archivoCSV) {
-  document.getElementById("resultado").innerHTML =
-    "<p style='color:red;'>No se especificó archivo CSV.</p>";
-} else {
-  fetch(archivoCSV)
-    .then(response => response.text())
-    .then(data => {
-      const filas = data.split("\n").slice(1);
+fetch("base_datos.csv")
+  .then(response => response.text())
+  .then(data => {
+    const filas = data.split("\n").slice(1);
 
-      filas.forEach(fila => {
-        const columnas = fila.split(",");
-        if (columnas.length >= 3) {
-          baseDatos.push({
-            codigo: columnas[0].replace(/"/g, "").trim(),
-            nombre: columnas[1].replace(/"/g, "").trim(),
-            url: columnas[2].replace(/"/g, "").trim()
-          });
-        }
-      });
+    filas.forEach(fila => {
+      const columnas = fila.split(",");
+      if (columnas.length >= 3) {
+        baseDatos.push({
+          codigo: columnas[0].replace(/"/g, "").trim(),
+          nombre: columnas[1].replace(/"/g, "").trim(),
+          url: columnas[2].replace(/"/g, "").trim()
+        });
+      }
     });
-}
-
-function obtenerParametro(nombre) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(nombre);
-}
+  });
 
 function buscar() {
   const codigoIngresado = document.getElementById("codigo").value.trim();
