@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Verificación de Constancia</title>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #f4f6f9;
+}
+
+input {
+  padding: 10px;
+  width: 220px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+iframe {
+  margin-top: 20px;
+  width: 80%;
+  height: 600px;
+  border: 1px solid #ccc;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Verificación de Constancia</h2>
+
+<input type="text" id="codigo" placeholder="Ingrese su código">
+<button onclick="buscar()">Buscar</button>
+
+<div id="resultado"></div>
+
+<script>
+
+let baseDatos = [];
+let archivoCSV = obtenerParametro("archivo");
+
+if (!archivoCSV) {
+  document.getElementById("resultado").innerHTML =
+    "<p style='color:red;'>No se especificó archivo CSV.</p>";
+} else {
+  fetch(archivoCSV)
+    .then(response => response.text())
+    .then(data => {
+      const filas = data.split("\n").slice(1);
+
+      filas.forEach(fila => {
+        const columnas = fila.split(",");
+        if (columnas.length >= 3) {
+          baseDatos.push({
+            codigo: columnas[0].replace(/"/g, "").trim(),
+            nombre: columnas[1].replace(/"/g, "").trim(),
+            url: columnas[2].replace(/"/g, "").trim()
+          });
+        }
+      });
+    });
+}
+
+function obtenerParametro(nombre) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(nombre);
+}
+
+function buscar() {
+  const codigoIngresado = document.getElementById("codigo").value.trim();
+
+  const encontrado = baseDatos.find(
+    item => item.codigo.toUpperCase() === codigoIngresado.toUpperCase()
+  );
+
+  if (encontrado) {
+    document.getElementById("resultado").innerHTML =
+      `<h3>${encontrado.nombre}</h3>
+       <iframe src="${encontrado.url.replace('/view','/preview')}"></iframe>`;
+  } else {
+    document.getElementById("resultado").innerHTML =
+      "<p style='color:red;'>Código no encontrado</p>";
+  }
+}
+
+</script>
+
+</body>
+</html>
