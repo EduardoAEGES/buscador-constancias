@@ -1,87 +1,353 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<title>Verificación de Constancia</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de Constancias - Talleres Académicos</title>
 
-<style>
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #f4f6f9;
-}
+  <!-- Google Fonts: Roboto for a clean, academic look -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-input {
-  padding: 10px;
-  width: 220px;
-}
+  <style>
+    :root {
+      --primary-color: #003366;
+      /* Deep Academic Blue */
+      --accent-color: #c5a017;
+      /* Gold/Bronze for achievement */
+      --bg-color: #f0f2f5;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --text-muted: #666666;
+      --error-color: #d32f2f;
+      --success-color: #2e7d32;
+    }
 
-button {
-  padding: 10px 20px;
-  background: #1a73e8;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(to bottom, #e0eafc, #cfdef3);
+    }
 
-iframe {
-  margin-top: 20px;
-  width: 80%;
-  height: 600px;
-  border: 1px solid #ccc;
-}
-</style>
+    .container {
+      width: 100%;
+      max-width: 900px;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      /* Slightly less rounded for academic feel */
+      box-shadow: 0 10px 25px rgba(0, 51, 102, 0.15);
+      /* Blue-tinted shadow */
+      padding: 0;
+      overflow: hidden;
+      border-top: 5px solid var(--primary-color);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      background-color: var(--card-bg);
+      padding: 40px 40px 20px 40px;
+      text-align: center;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .icon-container {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: auto;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .icon-container img {
+      max-width: 180px;
+      /* Reduced from 250px */
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .icon-container img:hover {
+      transform: scale(1.05);
+      /* Subtle interaction */
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      color: var(--primary-color);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin: 0;
+      font-weight: 400;
+    }
+
+    .card-body {
+      padding: 40px;
+    }
+
+    .input-group {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 15px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .search-box {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 18px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.1);
+    }
+
+    input::placeholder {
+      color: #bdc3c7;
+      font-weight: 300;
+    }
+
+    button.search-btn {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    button.search-btn:hover {
+      background-color: #002244;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    button.search-btn:active {
+      transform: translateY(0);
+    }
+
+    .result-container {
+      margin-top: 40px;
+      border-top: 2px dashed #e0e0e0;
+      padding-top: 40px;
+      display: none;
+      /* Oculto por defecto */
+      text-align: center;
+    }
+
+    .result-container.active {
+      display: block;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    .student-name-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .student-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin: 0 0 25px 0;
+      font-family: 'Georgia', serif;
+      /* Serif font for the name looks more like a certificate */
+    }
+
+    .download-btn {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(197, 160, 23, 0.3);
+    }
+
+    .download-btn:hover {
+      background-color: #b08d0f;
+      transform: scale(1.05);
+    }
+
+    iframe {
+      width: 100%;
+      height: 650px;
+      border: 1px solid #e0e0e0;
+      /* Clean border */
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-weight: 500;
+      margin-top: 20px;
+      text-align: center;
+      background-color: rgba(211, 47, 47, 0.05);
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid rgba(211, 47, 47, 0.2);
+      display: none;
+    }
+
+    .error-message.visible {
+      display: block;
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-5px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(5px);
+      }
+    }
+
+    /* Footer aesthetic */
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
+
+    @media (max-width: 640px) {
+
+      .card-header,
+      .card-body {
+        padding: 25px;
+      }
+
+      iframe {
+        height: 400px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<h2>Verificación de Constancia</h2>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <div class="icon-container">
+          <img src="LOGO_CERTUS_SUNAT.png" alt="Logo Institucional">
+        </div>
+        <h1>Verificación de Constancias</h1>
+        <p class="subtitle">TALLERES ACADÉMICOS</p>
+      </div>
 
-<input type="text" id="codigo" placeholder="Ingrese su código">
-<button onclick="buscar()">Buscar</button>
+      <div class="card-body">
+        <div class="search-box">
+          <div class="input-group">
+            <label class="input-label">INGRESA TU DNI O LOS 8 PRIMEROS DIGITOS DE TU DOCUMENTO DE IDENTIDAD REGISTRADO
+              EN EL FORMULARIO</label>
+            <input type="text" id="codigo" placeholder="Ej. 70123456" autocomplete="off">
+          </div>
+          <button class="search-btn" onclick="buscar()">Buscar Constancia</button>
 
-<div id="resultado"></div>
+          <div id="mensaje-error" class="error-message"></div>
+        </div>
 
-<script>
+        <div id="resultado" class="result-container">
+          <!-- Los resultados se inyectarán aquí -->
+        </div>
+      </div>
+    </div>
 
-let baseDatos = [];
+    <div class="footer">
+      &copy; 2026 Portal Académico. Todos los derechos reservados.
+    </div>
+  </div>
 
-fetch("base_datos.csv")
-  .then(response => response.text())
-  .then(data => {
-    const filas = data.split("\n").slice(1);
-
-    filas.forEach(fila => {
-      // Use split('","') to correctly handle commas inside quoted fields
-      const columnas = fila.split('","');
-      if (columnas.length >= 3) {
-        baseDatos.push({
-          codigo: columnas[0].replace(/"/g, "").trim(),
-          nombre: columnas[1].replace(/"/g, "").trim(),
-          url: columnas[2].replace(/"/g, "").trim()
-        });
-      }
-    });
-  });
-
-function buscar() {
-  const codigoIngresado = document.getElementById("codigo").value.trim();
-
-  const encontrado = baseDatos.find(
-    item => item.codigo.toUpperCase() === codigoIngresado.toUpperCase()
-  );
-
-  if (encontrado) {
-    document.getElementById("resultado").innerHTML =
-      `<h3>${encontrado.nombre}</h3>
-       <iframe src="${encontrado.url}"></iframe>`;
-  } else {
-    document.getElementById("resultado").innerHTML =
-      "<p style='color:red;'>Código no encontrado</p>";
-  }
-}
-
-</script>
-
+  <script src="script.js"></script>
 </body>
+
 </html>
